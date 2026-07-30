@@ -96,6 +96,10 @@ body {
     line-height: 1.5;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 .top-bar {
     background: #ff6b35;
     padding: 12px 20px;
@@ -399,6 +403,7 @@ body {
     border-radius: 8px;
     font-size: 15px;
     font-family: 'Noto Sans Georgian', sans-serif;
+    width: 100%;
 }
 
 .order-form input:focus,
