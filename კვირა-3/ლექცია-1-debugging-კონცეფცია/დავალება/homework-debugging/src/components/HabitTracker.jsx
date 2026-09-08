@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import HabitForm from './HabitForm'
 import HabitList from './HabitList'
 import StreakBadge from './StreakBadge'
@@ -6,13 +6,23 @@ import StreakBadge from './StreakBadge'
 function HabitTracker() {
   const [habits, setHabits] = useState([])
   const [filter, setFilter] = useState('all')
-  const [visibleHabits, setVisibleHabits] = useState([])
+  // const [visibleHabits, setVisibleHabits] = useState([])
   const [addCounter, setAddCounter] = useState(0)
 
   // ჩვევის დამატება — სიმულირებული API call
+  // const addHabit = (title, category) => {
+  //   const newHabit = {
+  //     id: Date.now(),
+  //     title,
+  //     category,
+  //     doneToday: false,
+  //     streak: 0,
+  //     createdAt: Date.now()
+  //   }
+
   const addHabit = (title, category) => {
     const newHabit = {
-      id: Date.now(),
+      id: Date.now() + Math.random(),
       title,
       category,
       doneToday: false,
@@ -21,21 +31,35 @@ function HabitTracker() {
     }
 
     setTimeout(() => {
-      setHabits([...habits, newHabit])
+      setHabits(prevHabits => [...prevHabits, newHabit])
     }, 150)
 
-    setAddCounter(addCounter + 1)
+    setAddCounter(prev => prev + 1)
   }
 
   // დღევანდელი სტატუსის ცვლილება
+  // const toggleHabit = (id) => {
+  //   const habit = habits.find(h => h.id === id)
+
+  //   habit.doneToday = !habit.doneToday
+  //   habit.streak = habit.doneToday ? habit.streak + 1 : habit.streak - 1
+
+  //   setHabits(habits)
+  // }
+
   const toggleHabit = (id) => {
-    const habit = habits.find(h => h.id === id)
-
-    habit.doneToday = !habit.doneToday
-    habit.streak = habit.doneToday ? habit.streak + 1 : habit.streak - 1
-
-    setHabits(habits)
-  }
+    setHabits(habits.map(habit => {
+      if (habit.id === id) {
+        const doneToday = !habit.doneToday
+        return {
+          ...habit,
+          doneToday,
+          streak: doneToday ? habit.streak + 1 : habit.streak - 1
+        }
+      }
+      return habit
+    }))
+  };
 
   // ჩვევის წაშლა
   const deleteHabit = (id) => {
@@ -43,9 +67,15 @@ function HabitTracker() {
   }
 
   // ჩვევის წაშლა 5 წამში (გადაფიქრების დრო)
+  // const deleteHabitDelayed = (id) => {
+  //   setTimeout(() => {
+  //     setHabits(habits.filter(habit => habit.id !== id))
+  //   }, 5000)
+  // }
+
   const deleteHabitDelayed = (id) => {
     setTimeout(() => {
-      setHabits(habits.filter(habit => habit.id !== id))
+      setHabits(prevHabits => prevHabits.filter(habit => habit.id !== id))
     }, 5000)
   }
 
@@ -55,15 +85,21 @@ function HabitTracker() {
   }
 
   // ფილტრაცია
-  useEffect(() => {
-    if (filter === 'all') {
-      setVisibleHabits(habits)
-    } else if (filter === 'active') {
-      setVisibleHabits(habits.filter(habit => !habit.doneToday))
-    } else if (filter === 'done') {
-      setVisibleHabits(habits.filter(habit => habit.doneToday))
-    }
-  }, [habits])
+  // useEffect(() => {
+  //   if (filter === 'all') {
+  //     setVisibleHabits(habits)
+  //   } else if (filter === 'active') {
+  //     setVisibleHabits(habits.filter(habit => !habit.doneToday))
+  //   } else if (filter === 'done') {
+  //     setVisibleHabits(habits.filter(habit => habit.doneToday))
+  //   }
+  // }, [habits])
+
+  const visibleHabits = habits.filter(habit => {
+    if (filter === 'active') return !habit.doneToday
+    if (filter === 'done') return habit.doneToday
+    return true;
+  })
 
   const activeCount = habits.filter(habit => !habit.doneToday).length
 

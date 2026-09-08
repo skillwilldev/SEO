@@ -8,6 +8,8 @@ function StreakBadge({ onReset }) {
       console.log('⏱ StreakBadge tick')
       setTimeSinceLastAdd(prev => prev + 1)
     }, 1000)
+
+    return () => clearInterval(interval)
   }, [])
 
   // reset — როცა ახალი ჩვევა ემატება

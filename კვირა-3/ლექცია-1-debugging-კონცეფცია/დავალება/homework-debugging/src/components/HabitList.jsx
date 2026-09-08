@@ -11,9 +11,9 @@ function HabitList({ habits, onToggle, onDelete, onDeleteDelayed }) {
 
   return (
     <ul className="habit-list">
-      {habits.map((habit, index) => (
+      {habits.map((habit) => (
         <HabitCard
-          key={index}
+          key={habit.id}
           habit={habit}
           onToggle={onToggle}
           onDelete={onDelete}
