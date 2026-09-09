@@ -48,9 +48,15 @@ export default function App() {
     );
   };
 
+  // const handleRemoveDish = (dishId) => {
+  //   console.log('🗑️ App.handleRemoveDish()', { dishId });
+
+  //   // setOrder(prevOrder => prevOrder.filter(item => item.id !== dishId));
+  //   prevOrder.filter(item => item.id !== dishId);
+  // };
+
   const handleRemoveDish = (dishId) => {
     console.log('🗑️ App.handleRemoveDish()', { dishId });
-
     setOrder(prevOrder => prevOrder.filter(item => item.id !== dishId));
   };
 

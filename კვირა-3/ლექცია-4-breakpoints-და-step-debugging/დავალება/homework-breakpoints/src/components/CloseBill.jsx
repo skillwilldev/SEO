@@ -13,29 +13,59 @@ async function sendBillToRegister(items, total) {
 export default function CloseBill({ order, total, perPerson, onBillClosed }) {
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // const handleCloseBill = async () => {
+  //   console.log('💳 CloseBill.handleCloseBill() — Entry', { order, total });
+
+  //   setIsProcessing(true);
+
+  //   const firstDishName = order[0].name;
+
+  //   const result = await sendBillToRegister(order, total);
+
+  //   alert(
+  //     `ანგარიში დახურულია!\n` +
+  //     `ნომერი: ${result.billId}\n` +
+  //     `პირველი კერძი: ${firstDishName}\n` +
+  //     `ჯამი: ${total.toFixed(2)} ₾\n` +
+  //     `თითო ადამიანზე: ${perPerson.toFixed(2)} ₾`
+  //   );
+
+  //   setIsProcessing(false);
+  //   onBillClosed();
+
+  //   console.log('💳 CloseBill.handleCloseBill() — Exit');
+  // };
+
   const handleCloseBill = async () => {
     console.log('💳 CloseBill.handleCloseBill() — Entry', { order, total });
 
+    if (!order || order.length === 0) {
+      alert('კალათა ცარიელია! ჯერ პროდუქტი დაამატეთ.');
+      return;
+    }
+
     setIsProcessing(true);
 
-    const firstDishName = order[0].name;
+    try {
+      const firstDishName = order[0].name;
+      const result = await sendBillToRegister(order, total);
 
-    const result = await sendBillToRegister(order, total);
+      alert(
+        `ანგარიში დახურულია!\n` +
+        `ნომერი: ${result.billId}\n` +
+        `პირველი კერძი: ${firstDishName}\n` +
+        `ჯამი: ${total.toFixed(2)} ₾\n` +
+        `თითო ადამიანზე: ${perPerson.toFixed(2)} ₾`
+      );
 
-    alert(
-      `ანგარიში დახურულია!\n` +
-      `ნომერი: ${result.billId}\n` +
-      `პირველი კერძი: ${firstDishName}\n` +
-      `ჯამი: ${total.toFixed(2)} ₾\n` +
-      `თითო ადამიანზე: ${perPerson.toFixed(2)} ₾`
-    );
-
-    setIsProcessing(false);
-    onBillClosed();
+      onBillClosed();
+    } finally {
+      setIsProcessing(false);
+    }
 
     console.log('💳 CloseBill.handleCloseBill() — Exit');
   };
-
+  
   return (
     <button
       className="checkout-btn"

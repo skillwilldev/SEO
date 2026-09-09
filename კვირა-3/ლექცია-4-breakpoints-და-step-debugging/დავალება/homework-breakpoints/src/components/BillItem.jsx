@@ -11,10 +11,15 @@ export default function BillItem({ item, onUpdateQuantity, onRemove }) {
     }
   };
 
+  // const handleRemove = () => {
+  //   console.log('🗑️ BillItem.handleRemove()', { item });
+  //   onRemove(item.dishId);
+  // };
   const handleRemove = () => {
     console.log('🗑️ BillItem.handleRemove()', { item });
-    onRemove(item.dishId);
+    onRemove(item.id);
   };
+
 
   const itemTotal = item.price * item.quantity;
 
