@@ -16,28 +16,59 @@ export default function ApiPanel() {
   const [liveRows, setLiveRows] = useState(0)
 
   // ძიების პარამეტრები — ობიექტი კომპონენტის სხეულში
-  const searchOptions = { term: serverTerm, limit: 5 }
+  // const searchOptions = { term: serverTerm, limit: 5 }
+
+  // useEffect(() => {
+  //   if (!liveSearch) return
+
+  //   loadJson(`/tickets.json?q=${encodeURIComponent(searchOptions.term)}&limit=${searchOptions.limit}`)
+  //     .then(response => {
+  //       setLiveRows(Array.isArray(response.data) ? response.data.length : 0)
+  //       setRequestCount(count => count + 1)
+  //     })
+  // }, [liveSearch, searchOptions])
 
   useEffect(() => {
-    if (!liveSearch) return
+  if (!liveSearch) return
 
-    loadJson(`/tickets.json?q=${encodeURIComponent(searchOptions.term)}&limit=${searchOptions.limit}`)
-      .then(response => {
-        setLiveRows(Array.isArray(response.data) ? response.data.length : 0)
-        setRequestCount(count => count + 1)
-      })
-  }, [liveSearch, searchOptions])
+  loadJson(`/tickets.json?q=${encodeURIComponent(serverTerm)}&limit=5`)
+    .then(response => {
+      setLiveRows(Array.isArray(response.data) ? response.data.length : 0)
+      setRequestCount(count => count + 1)
+    })
+}, [liveSearch, serverTerm])
+
+
+
+//   const runRequest = async (url, label) => {
+//   console.log('▶️ request:', label)
+//   setLoading(true)
+//   setDashboard(null)
+
+//   const response = await loadJson(url)
+
+//   setResult({ ...response, url, label })
+//   setError(null)
+//   setLoading(false)
+// }
 
   const runRequest = async (url, label) => {
     console.log('▶️ request:', label)
     setLoading(true)
     setDashboard(null)
+    setResult(null)
 
-    const response = await loadJson(url)
-
-    setResult({ ...response, url, label })
-    setError(null)
-    setLoading(false)
+    try {
+      const response = await loadJson(url)
+      setResult({ ...response, url, label })
+      setError(null)
+    } catch (err) {
+      console.error('მოთხოვნის შეცდომა:', err.message)
+      setError(`მოთხოვნის შეცდომა: ${err.message}`)
+      setResult(null)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const runDashboard = async () => {

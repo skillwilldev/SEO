@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useMemo } from 'react'
 import { computeSlaReport } from '../utils/sla'
 
 export default function SlaPanel({ tickets, assignments, thresholds }) {
@@ -6,7 +6,11 @@ export default function SlaPanel({ tickets, assignments, thresholds }) {
   renderCount.current++
 
   // SLA-ს ანგარიში ითვლება კომპონენტის სხეულში
-  const report = computeSlaReport(tickets, assignments)
+  //  const report = computeSlaReport(tickets, assignments)
+  const report = useMemo(
+    () => computeSlaReport(tickets, assignments),
+    [tickets, assignments]
+  )
 
   return (
     <div className="panel">

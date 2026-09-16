@@ -10,6 +10,11 @@ export async function loadJson(url) {
   const startedAt = performance.now()
 
   const response = await fetch(url, { headers: { Accept: 'application/json' } })
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`)
+  }
+
   const text = await response.text()
 
   let data = []
@@ -27,20 +32,39 @@ export async function loadJson(url) {
 }
 
 // დაშბორდის მონაცემები — სამი დამოუკიდებელი endpoint
+// export async function loadDashboard() {
+//   const startedAt = performance.now()
+
+//   const ticketsResult = await loadJson('/tickets.json')
+//   const agentsResult = await loadJson('/agents.json')
+//   const targetsResult = await loadJson('/sla-targets.json')
+
+//   const totalMs = Math.round(performance.now() - startedAt)
+
+//   return {
+//     tickets: ticketsResult.data,
+//     agents: agentsResult.data,
+//     targets: targetsResult.data,
+//     parts: [ticketsResult.ms, agentsResult.ms, targetsResult.ms],
+//     totalMs,
+//   }
+// }
+
 export async function loadDashboard() {
   const startedAt = performance.now()
-
-  const ticketsResult = await loadJson('/tickets.json')
-  const agentsResult = await loadJson('/agents.json')
-  const targetsResult = await loadJson('/sla-targets.json')
+  const [statsRes, agentsRes, alertsRes] = await Promise.all([
+    loadJson('/tickets.json'),
+    loadJson('/agents.json'),
+    loadJson('/sla-targets.json')
+  ])
 
   const totalMs = Math.round(performance.now() - startedAt)
 
   return {
-    tickets: ticketsResult.data,
-    agents: agentsResult.data,
-    targets: targetsResult.data,
-    parts: [ticketsResult.ms, agentsResult.ms, targetsResult.ms],
+    tickets: statsRes.data,
+    agents: agentsRes.data,
+    targets: alertsRes.data,
     totalMs,
+    parts: [statsRes.ms, agentsRes.ms, alertsRes.ms]
   }
 }

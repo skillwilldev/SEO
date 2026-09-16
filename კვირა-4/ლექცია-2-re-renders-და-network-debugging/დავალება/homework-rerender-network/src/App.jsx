@@ -7,6 +7,9 @@ import SymptomPanel from './components/SymptomPanel'
 import { tickets as ticketLibrary } from './data'
 import { filterTickets } from './utils/sla'
 
+
+const SLA_THRESHOLDS = { breachMinutes: 240, riskMinutes: 120 }
+
 function App() {
   const renderCount = useRef(0)
   renderCount.current++
@@ -25,11 +28,17 @@ function App() {
     console.log('🔍 ფილტრი შეიცვალა:', JSON.stringify(searchTerm), '| priority:', priority)
   }, [searchTerm, priority])
 
-  const openTickets = tickets.filter(ticket => !resolvedIds.includes(ticket.id))
+  // const openTickets = tickets.filter(ticket => !resolvedIds.includes(ticket.id))
+
+  const openTickets = useMemo(
+    () => tickets.filter(ticket => !resolvedIds.includes(ticket.id)),
+    [tickets, resolvedIds]
+  )
 
   const visibleTickets = useMemo(
     () => filterTickets(openTickets, searchTerm, priority),
-    [tickets, priority, resolvedIds]
+    // [tickets, priority, resolvedIds]
+    [openTickets, searchTerm, priority, resolvedIds]
   )
 
   const handleAssign = (ticketId, agentName) => {
@@ -84,7 +93,8 @@ function App() {
           <SlaPanel
             tickets={openTickets}
             assignments={assignments}
-            thresholds={{ breachMinutes: 240, riskMinutes: 120 }}
+            // thresholds={{ breachMinutes: 240, riskMinutes: 120 }}
+            thresholds={SLA_THRESHOLDS}
           />
         </aside>
       </div>
