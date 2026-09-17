@@ -11,7 +11,7 @@ export default defineConfig({
     //   sourcemap: true       → .map ფაილი + sourceMappingURL კომენტარი (ნაწილი 3)
     //   sourcemap: 'hidden'   → .map ფაილი, sourceMappingURL კომენტარის გარეშე (ნაწილი 6)
     // ======================================================
-    sourcemap: false,
+    sourcemap: 'hidden',
 
     minify: 'terser',
     terserOptions: {

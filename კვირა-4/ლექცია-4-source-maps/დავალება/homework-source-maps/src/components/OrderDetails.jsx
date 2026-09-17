@@ -14,7 +14,10 @@ export default function OrderDetails({ order }) {
         <p className="panel-note">
           კლიენტი: <strong>{order.customer.name}</strong>
           <br />
-          მისამართი: {order.customer.address}
+          {/* მისამართი: {order.customer.address} */}
+          მისამართი: {typeof order.customer.address === 'object'
+            ? `${order.customer.address.city}, ${order.customer.address.street}`
+            : order.customer.address}
         </p>
 
         <table className="data-table" style={{ marginTop: '0.6rem' }}>

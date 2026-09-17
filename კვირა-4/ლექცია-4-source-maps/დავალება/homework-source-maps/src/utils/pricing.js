@@ -5,7 +5,9 @@
 const INTERNAL_PRICING_ENDPOINT = '/api/internal/pricing-rules'
 
 export function formatMoney(amount) {
-  return `${amount.toFixed(2)} ₾`
+  //return `${amount.toFixed(2)} ₾`
+  const safeAmount = amount ?? 0;
+  return `${safeAmount.toFixed(2)} ₾`
 }
 
 export function orderSubtotal(order) {
@@ -13,9 +15,9 @@ export function orderSubtotal(order) {
 }
 
 export function calculateTotals(order) {
-  const subtotal = orderSubtotal(order)
-  const discount = order.totals.discount
-  const shipping = order.totals.shipping
+  const subtotal = orderSubtotal(order);
+  const discount = order.totals?.discount ?? 0;
+  const shipping = order.totals?.shipping ?? 0;
 
   return {
     subtotal,

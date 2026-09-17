@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { applyCoupon, calculateTotals, formatMoney } from '../utils/pricing'
 
 export default function TotalsBar({ order, couponPercent, onTotalChange }) {
@@ -5,7 +6,10 @@ export default function TotalsBar({ order, couponPercent, onTotalChange }) {
   const finalTotal = couponPercent ? applyCoupon(totals.total, couponPercent) : totals.total
 
   // მთავარ კომპონენტს ვატყობინებთ ბოლო ჯამს
-  onTotalChange(finalTotal)
+  // onTotalChange(finalTotal)
+  useEffect(() => {
+    onTotalChange(finalTotal)
+  }, [finalTotal, onTotalChange])
 
   return (
     <div className="panel">

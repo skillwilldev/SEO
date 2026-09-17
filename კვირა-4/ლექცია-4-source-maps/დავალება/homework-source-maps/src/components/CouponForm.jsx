@@ -6,14 +6,18 @@ export default function CouponForm({ onApply }) {
   const [attempts, setAttempts] = useState(0)
   const [message, setMessage] = useState('')
 
-  const percent = coupons[code.trim().toUpperCase()]
+  // const percent = coupons[code.trim().toUpperCase()]
 
   // სტატისტიკა: რამდენჯერ სცადა მომხმარებელმა კოდის შეყვანა
-  if (code.trim().length >= 4) {
-    setAttempts(attempts + 1)
-  }
+  // if (code.trim().length >= 4) {
+  //   setAttempts(attempts + 1)
+  // }
 
   const handleApply = () => {
+
+    setAttempts(prev => prev + 1);
+    const percent = coupons[code.trim().toUpperCase()];
+
     if (!percent) {
       setMessage(`კოდი „${code}" არ არსებობს`)
       return

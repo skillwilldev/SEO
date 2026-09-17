@@ -11,7 +11,7 @@ export default function OrderList({ orders, selectedId, onSelect }) {
       <div className="panel-body">
         <div className="list">
           {orders.map(order => (
-            <div className={`list-row ${order.id === selectedId ? 'row-selected' : ''}`}>
+            <div key={order.id} className={`list-row ${order.id === selectedId ? 'row-selected' : ''}`}>
               <div className="row-main">
                 <div className="row-title">{order.id} — {order.customer.name}</div>
                 <div className="row-sub">
